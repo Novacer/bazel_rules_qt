@@ -17,6 +17,7 @@ QT_LIBRARIES = [
         # When being on Windows this glob will be empty
         hdrs = glob(["%s/**" % include_folder], allow_empty = True),
         includes = ["."],
+        strip_include_prefix = "%s/" % include_folder,
         linkopts = ["-l%s" % library_name],
         # Available from Bazel 4.0.0
         # target_compatible_with = ["@platforms//os:linux"],
@@ -43,6 +44,7 @@ QT_LIBRARIES = [
         # When being on Linux or macOS this glob will be empty
         hdrs = glob(["include/%s/**" % include_folder], allow_empty = True),
         includes = ["include"],
+        strip_include_prefix = "%s/" % include_folder,
         # Available from Bazel 4.0.0
         # target_compatible_with = ["@platforms//os:windows"],
         deps = [":qt_%s_windows_import" % name],
@@ -56,6 +58,7 @@ QT_LIBRARIES = [
         # When being on Windows or Linux this glob will be empty
         hdrs = glob(["%s/**" % include_folder], allow_empty = True),
         includes = ["."],
+        strip_include_prefix = "%s/" % include_folder,
         linkopts = ["-F/usr/local/opt/qt5/lib"] + [
             "-framework %s" % library_name.replace("5", "") # macOS qt libs do not contain a 5 - e.g. instead of Qt5Core the lib is called QtCore
             ],
