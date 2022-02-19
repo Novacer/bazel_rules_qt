@@ -62,6 +62,10 @@ def qt_autoconf_impl(repository_ctx):
         qt5_dir_env = _get_env_var(repository_ctx, "Qt5_Dir", None)
         if qt5_dir_env:
             default_qt_path = qt5_dir_env
+            # Furthermore, if path contains /includes, then we need to use that
+            qt5_dir_env_includes = qt5_dir_env + "/include"
+            if repository_ctx.path(qt5_dir_env_includes).exists:
+                default_qt_path = qt5_dir_env_includes
 
         if not repository_ctx.path(default_qt_path).exists:
             default_qt_path = "/usr/include/qt"
