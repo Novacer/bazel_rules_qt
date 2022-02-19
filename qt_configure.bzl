@@ -16,12 +16,24 @@ def qt_autoconf_impl(repository_ctx):
     is_linux_machine = False
     if os_name.find("windows") != -1:
         # Inside this folder, in Windows you can find include, lib and bin folder
-        default_qt_path = "C:\\\\Qt\\\\5.9.9\\\\msvc2017_64\\\\"
-        # If predefined path does not exist search for an alternative e.g. "C:\\\\Qt\\\\5.12.10\\\\msvc2017_64\\\\"
+        default_qt_path = "C:\\\\Qt\\\\5.15.2\\\\msvc2019_64\\\\"
+        # If predefined path does not exist search for an alternative e.g. "C:\\\\Qt\\\\5.12.10\\\\msvc2019_64\\\\"
         if not repository_ctx.path(default_qt_path).exists:
             win_path_env = _get_env_var(repository_ctx, "PATH")
             start_index = win_path_env.index("C:\\Qt\\5.")
-            end_index = win_path_env.index("msvc2017_64\\", start_index) + len("msvc2017_64")
+            # Search higher version first, prefer 64 bit over 32 bit.
+            # TODO add more as needed, make 64/32 bit configurable depending on build etc...
+            msvc_vers = ["msvc2019_64", "msvc2019", "msvc2017_64", "msvc2017"]
+
+            def str_index_no_throw(toolchain):
+                if toolchain in win_path_env:
+                    return win_path_env.index(toolchain, start_index) + len(toolchain)
+                return None
+
+            searched_toolchains = [str_index_no_throw(toolchain) for toolchain in msvc_vers]
+            end_index = next(searched for searched in searched_toolchains if searched is not None)
+            # Original. TODO remove
+            # end_index = win_path_env.index("msvc2017_64\\", start_index) + len("msvc2017_64")
             default_qt_path = win_path_env[start_index:end_index+1]
             default_qt_path = default_qt_path.replace('\\', "\\\\")
     elif os_name.find("linux") != -1:
