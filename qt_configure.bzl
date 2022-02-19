@@ -1,3 +1,19 @@
+def _index_no_throw(l, item, start_index=0):
+    """Finds index of item in l, None otherwise."""
+    if item in l:
+        return l.index(item, start_index) + len(item)
+    return None
+
+def _return_first_nonnull(l):
+    """
+    Returns first nonnull element of l, otherwise returns None
+    This is needed since functions like next() aren't available
+    """
+    for item in l:
+        if item:
+            return item
+    return None
+
 def _get_env_var(repository_ctx, name, default = None):
     """Returns a value from an environment variable."""
     for key, value in repository_ctx.os.environ.items():
@@ -24,14 +40,10 @@ def qt_autoconf_impl(repository_ctx):
             # Search higher version first, prefer 64 bit over 32 bit.
             # TODO add more as needed, make 64/32 bit configurable depending on build etc...
             msvc_vers = ["msvc2019_64", "msvc2019", "msvc2017_64", "msvc2017"]
-
-            def str_index_no_throw(toolchain):
-                if toolchain in win_path_env:
-                    return win_path_env.index(toolchain, start_index) + len(toolchain)
-                return None
-
-            searched_toolchains = [str_index_no_throw(toolchain) for toolchain in msvc_vers]
-            end_index = next(searched for searched in searched_toolchains if searched is not None)
+            searched_toolchains = [_index_no_throw(msvc_vers, toolchain, start_index) for toolchain in msvc_vers]
+            end_index = _return_first_nonnull(searched_toolchains)
+            if end_index == None:
+                fail("Unable to find msvc toolchain")
             # Original. TODO remove
             # end_index = win_path_env.index("msvc2017_64\\", start_index) + len("msvc2017_64")
             default_qt_path = win_path_env[start_index:end_index+1]
