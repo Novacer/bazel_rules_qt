@@ -33,7 +33,7 @@ def qt_autoconf_impl(repository_ctx):
     if os_name.find("windows") != -1:
         # Inside this folder, in Windows you can find include, lib and bin folder
         default_qt_path = "C:\\\\Qt\\\\5.15.2\\\\msvc2019_64\\\\"
-        # Overwrite default with value for Qt5_DIR env variable if it exists.
+        # Overwrite default with value for Qt5_Dir env variable if it exists.
         qt5_dir_env = _get_env_var(repository_ctx, "Qt5_Dir", None)
         if qt5_dir_env:
             default_qt_path = qt5_dir_env
@@ -54,11 +54,15 @@ def qt_autoconf_impl(repository_ctx):
             default_qt_path = default_qt_path.replace('\\', "\\\\")
     elif os_name.find("linux") != -1:
         is_linux_machine = True
-
         # In Linux, this is the equivalent to the include folder, the binaries are located in
         # /usr/bin/
         # This would be the path if it has been installed using a package manager
         default_qt_path = "/usr/include/x86_64-linux-gnu/qt5"
+        # Overwrite default with value for Qt5_Dir env variable if it exists.
+        qt5_dir_env = _get_env_var(repository_ctx, "Qt5_Dir", None)
+        if qt5_dir_env:
+            default_qt_path = qt5_dir_env
+
         if not repository_ctx.path(default_qt_path).exists:
             default_qt_path = "/usr/include/qt"
     elif os_name.find("mac") != -1:
