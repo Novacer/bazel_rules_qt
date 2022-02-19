@@ -44,7 +44,7 @@ QT_LIBRARIES = [
         # When being on Linux or macOS this glob will be empty
         hdrs = glob(["include/%s/**" % include_folder], allow_empty = True),
         includes = ["include"],
-        strip_include_prefix = "%s/" % include_folder,
+        strip_include_prefix = "include/%s/" % include_folder,
         # Available from Bazel 4.0.0
         # target_compatible_with = ["@platforms//os:windows"],
         deps = [":qt_%s_windows_import" % name],
