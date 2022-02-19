@@ -42,7 +42,7 @@ def qt_autoconf_impl(repository_ctx):
             msvc_vers = ["msvc2019_64", "msvc2019", "msvc2017_64", "msvc2017"]
             searched_toolchains = [_index_no_throw(msvc_vers, toolchain, start_index) for toolchain in msvc_vers]
             end_index = _return_first_nonnull(searched_toolchains)
-            if end_index is None:
+            if end_index == None:
                 fail("Unable to find msvc toolchain")
             # Original. TODO remove
             # end_index = win_path_env.index("msvc2017_64\\", start_index) + len("msvc2017_64")
