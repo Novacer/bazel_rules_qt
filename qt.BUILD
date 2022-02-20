@@ -11,6 +11,7 @@ QT_LIBRARIES = [
     ("opengl", "QtOpenGL", "Qt5OpenGL", []),
     ("multimedia", "QtMultimedia", "Qt5Multimedia", []),
     ("multimediawidgets", "QtMultimediaWidgets", "Qt5MultimediaWidgets", []),
+    ("concurrent", "QtConcurrent", "Qt5Concurrent", []),
 ]
 
 [
