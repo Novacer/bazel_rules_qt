@@ -9,8 +9,8 @@ QT_LIBRARIES = [
     ("qml_models", "QtQmlModels", "Qt5QmlModels", []),
     ("gui", "QtGui", "Qt5Gui", [":qt_core"]),
     ("opengl", "QtOpenGL", "Qt5OpenGL", []),
-    ("multimedia", "QtMultiMedia", "Qt5MultiMedia", []),
-    ("multimediawidgets", "QtMultiMediaWidgets", "Qt5MultiMediaWidgets", []),
+    ("multimedia", "QtMultimedia", "Qt5Multimedia", []),
+    ("multimediawidgets", "QtMultimediaWidgets", "Qt5MultimediaWidgets", []),
 ]
 
 [
