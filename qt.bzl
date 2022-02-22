@@ -109,13 +109,13 @@ genqrc = rule(
     },
 )
 
-def qt_resource_file(name, qrc_file, **kwargs):
+def qt_resource_file(name, qrc_file, files, **kwargs):
     """Creates a cc_library by running `rcc` on an existing qrc file.
 
     Args:
       name: rule name
       qrc_file: the .qrc file
-      resource_name: name of the resource. Ex: 
+      files: list of resource files referenced by the qrc.
       kwargs: extra args to pass to the cc_library
     """
     # every resource cc_library that is linked into the same binary needs a
@@ -126,7 +126,7 @@ def qt_resource_file(name, qrc_file, **kwargs):
         name = name + "_gen",
         resource_name = qrc_file.split(".")[0],
         # not relevant in this context.
-        files = [],
+        files = files,
         qrc = qrc_file,
         cpp = outfile,
     )
