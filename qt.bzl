@@ -109,17 +109,14 @@ genqrc = rule(
     },
 )
 
-def qt_resource(name, files, **kwargs):
-    """Creates a cc_library containing the contents of all input files using qt's `rcc` tool.
+def qt_resource_file(name, qrc_file, **kwargs):
+    """Creates a cc_library by running `rcc` on an existing qrc file.
 
     Args:
       name: rule name
-      files: a list of files to be included in the resource bundle
+      qrc_file: the .qrc file
       kwargs: extra args to pass to the cc_library
     """
-    qrc_file = name + "_qrc.qrc"
-    genqrc(name = name + "_qrc", files = files, qrc = qrc_file)
-
     # every resource cc_library that is linked into the same binary needs a
     # unique 'name'.
     rsrc_name = native.package_name().replace("/", "_") + "_" + name
@@ -136,6 +133,23 @@ def qt_resource(name, files, **kwargs):
         name = name,
         srcs = [outfile],
         alwayslink = 1,
+        **kwargs
+    )
+
+def qt_resource(name, files, **kwargs):
+    """Creates a cc_library containing the contents of all input files using qt's `rcc` tool.
+
+    Args:
+      name: rule name
+      files: a list of files to be included in the resource bundle
+      kwargs: extra args to pass to the cc_library
+    """
+    qrc_file = name + "_qrc.qrc"
+    genqrc(name = name + "_qrc", files = files, qrc = qrc_file)
+
+    qt_resource_file(
+        name = name,
+        qrc_file = qrc_file,
         **kwargs
     )
 
