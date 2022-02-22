@@ -139,6 +139,7 @@ def qt_resource_file(name, qrc_file, **kwargs):
 
 def qt_resource(name, files, **kwargs):
     """Creates a cc_library containing the contents of all input files using qt's `rcc` tool.
+
     Args:
       name: rule name
       files: a list of files to be included in the resource bundle
