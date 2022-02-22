@@ -73,6 +73,8 @@ def _gencpp(ctx):
         outputs = [ctx.outputs.cpp],
         arguments = args,
         executable = info.rcc_path,
+        # Run RCC outside the sandbox since it sometimes seems to not find files.
+        execution_requirements = { 'no-sandbox': '1' }
     )
     return [OutputGroupInfo(cpp = depset([ctx.outputs.cpp]))]
 
