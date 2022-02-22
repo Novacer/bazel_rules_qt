@@ -73,6 +73,8 @@ def _gencpp(ctx):
         outputs = [ctx.outputs.cpp],
         arguments = args,
         executable = info.rcc_path,
+        # Run RCC outside the sandbox since it sometimes seems to not find files.
+        execution_requirements = { 'no-sandbox': '1' }
     )
     return [OutputGroupInfo(cpp = depset([ctx.outputs.cpp]))]
 
@@ -108,6 +110,33 @@ genqrc = rule(
         "qrc": attr.output(),
     },
 )
+
+def qt_resource_file(name, qrc_file, **kwargs):
+    """Creates a cc_library by running `rcc` on an existing qrc file.
+
+    Args:
+      name: rule name
+      qrc_file: the .qrc file
+      kwargs: extra args to pass to the cc_library
+    """
+    # every resource cc_library that is linked into the same binary needs a
+    # unique 'name'.
+
+    outfile = name + "_autogen.cpp"
+    gencpp(
+        name = name + "_gen",
+        resource_name = qrc_file.split(".")[0],
+        # not relevant in this context.
+        files = [],
+        qrc = qrc_file,
+        cpp = outfile,
+    )
+    cc_library(
+        name = name,
+        srcs = [outfile],
+        alwayslink = 1,
+        **kwargs
+    )
 
 def qt_resource(name, files, **kwargs):
     """Creates a cc_library containing the contents of all input files using qt's `rcc` tool.
