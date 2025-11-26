@@ -33,8 +33,8 @@ def qt_autoconf_impl(repository_ctx):
     if os_name.find("windows") != -1:
         # Inside this folder, in Windows you can find include, lib and bin folder
         default_qt_path = "C:\\\\Qt\\\\5.15.2\\\\msvc2019_64\\\\"
-        # Overwrite default with value for Qt5_DIR env variable if it exists.
-        qt5_dir_env = _get_env_var(repository_ctx, "Qt5_Dir", None)
+        # Overwrite default with value for QT_ROOT_DIR env variable if it exists.
+        qt5_dir_env = _get_env_var(repository_ctx, "QT_ROOT_DIR", None)
         if qt5_dir_env:
             default_qt_path = qt5_dir_env
         # If predefined path does not exist search for an alternative e.g. "C:\\\\Qt\\\\5.12.10\\\\msvc2019_64\\\\"
